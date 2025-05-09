@@ -1,0 +1,13 @@
+create server.js (this will be the main file of the backend server)
+    here npm init -y    
+install bcrypt to encrypt the password 
+install cloudinary to upload files to the cloud
+install cookie-parser to send authentication to server 
+install cors (it helps to connect backend with the frontend)
+install dotenv
+install express
+install jsonwebtokens (it will create tokens to authenticate the users)
+install mongoose (it helps to connect backend with the database)
+install multer (using this we can upload the images)
+install stripe/khalti to use the online payment gateway
+after that install nodemon in the development server only ( this helps such that whenever we make changes it will restart server)

@@ -1,0 +1,39 @@
+first create vite@latest
+then goto that folder and npm install
+delete app.css, clear app.jsx, and remove index.css, 
+in app.jsx do rafce.
+in index.html change favicon and title
+create folder structure in src
+create folder: components, pages, context, 
+add tailwind css in the project (vite tailwind)
+in vite.config.js import tailwind 
+install other packages like react router dom, react hot toast, 
+add google fonts (outfit font)
+setup the router, goto main then import browserrouter
+after setup context file for global state management, then import it in main.jsx
+/*Basic file and configuration is setup*/
+after that start creating the component
+first create navigation bar for that use prebuildui.com 
+for that goto components create Navbar file, do  rafce and then copy paste the code
+after that mount navbar component inside app.jsx and then boom navbar comes.
+then create banner which is just below the navigation bar
+after that create pages, at first create Home.jsx in page and then put Mainbanner inside it 
+after that in the app.jsx use Routes and route to element <Home/>
+in components folder create categories.jsx
+after create bestseller.jsx in the components
+then create productcard.jsx in the components and then copy and paste the prebuiltui code 
+then mount product card within the best seller component
+to mount products in the assets, first place it in the context so that next time it can be brought easily to the components 
+import toaster from react-hot-toast (It is a small temporary pop up message)
+after create a new component called BottomBanner.jsx
+create new component called newsletter.jsx
+create new component file called footer.jsx
+after that create login.jsx component
+after that goto pages folder and create new file called AllProducts.jsx
+after that create the new page called product categories ProductCategory.jsx
+then create new file in pages called productdetails.jsx
+now create cart.jsx
+create new file called AddAddress.jsx
+create new folder in components called seller and then create a new file called sellerlogin.jsx
+after in the pages folder create the sellerlayout.jsx
+create another file called AddProducts.jsx, orders.jsx, productlist.jsx,  
