@@ -91,3 +91,46 @@ export const login = async(req, res) => {
         })
     }
 }
+
+// check auth : /api/user/is-auth
+
+export const isAuth = async (req, res) =>{
+    try {
+        const {userId} = req.body;
+        const user = await User.findById(userId).select("-password")
+        return res.json({
+            success: true, 
+            user
+        })
+    } catch (error) {
+        res.json({
+            success: false,
+            message: error.message
+        })
+    }
+}
+
+//logout : /api/user/logout
+
+export const logout = async(req, res) => {
+    try {
+        res.clearCookie('token', {
+            httpOnly: true, 
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+        })
+        return res.json({
+            success: true, 
+            message: "Logged Out"
+        })
+        
+    } catch (error) {
+        console.log(error.message)
+        res.json({
+            success: false, 
+            message: error.message
+        })
+    }
+}
+
+
