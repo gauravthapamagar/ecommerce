@@ -1,56 +1,25 @@
-import Seller from "../models/Seller.js";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
-// Register Seller : /api/seller/register
-export const registerSeller = async (req, res) => {
-    try {
-        const { name, email, password } = req.body;
-        if (!name || !email || !password) {
-            return res.json({ success: false, message: 'Missing Details' });
-        }
-
-        const existingSeller = await Seller.findOne({ email });
-        if (existingSeller) {
-            return res.json({ success: false, message: 'Seller already exists' });
-        }
-
-        const hashedPassword = await bcrypt.hash(password, 10);
-        const seller = await Seller.create({ name, email, password: hashedPassword });
-
-        const token = jwt.sign({ id: seller._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
-
-        res.cookie('token', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-    });
-
-        return res.json({
-            success: true,
-            seller: { email: seller.email, name: seller.name }
-        });
-    } catch (error) {
-        console.log(error.message);
-        res.json({ success: false, message: error.message });
-    }
-};
+import dotenv from "dotenv";
+dotenv.config();
+const SELLER_EMAIL = process.env.SELLER_EMAIL;
+const SELLER_PASSWORD = process.env.SELLER_PASSWORD;
 
 // Login Seller : /api/seller/login
 export const loginSeller = async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log("ENV EMAIL:", SELLER_EMAIL);
+        console.log("ENV PASSWORD:", SELLER_PASSWORD);
         if (!email || !password) {
             return res.json({ success: false, message: "Email and password are required" });
         }
 
-        const seller = await Seller.findOne({ email });
-        if (!seller || !(await bcrypt.compare(password, seller.password))) {
+        // Check against hardcoded credentials
+        if (email !== SELLER_EMAIL || password !== SELLER_PASSWORD) {
             return res.json({ success: false, message: "Invalid email or password" });
         }
 
-        const token = jwt.sign({ id: seller._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
+        const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
         res.cookie('seller_token', token, {
             httpOnly: true,
@@ -61,7 +30,7 @@ export const loginSeller = async (req, res) => {
 
         return res.json({
             success: true,
-            seller: { email: seller.email, name: seller.name }
+            seller: { email }
         });
     } catch (error) {
         console.log(error.message);
@@ -72,10 +41,13 @@ export const loginSeller = async (req, res) => {
 // Check Seller Auth : /api/seller/is-auth
 export const isSellerAuth = async (req, res) => {
     try {
-        const { sellerId } = req.body;
-        const seller = await Seller.findById(sellerId).select("-password");
+        const token = req.cookies.seller_token;
+        if (!token) {
+            return res.json({ success: false, message: "Unauthorized" });
+        }
 
-        return res.json({ success: true, seller });
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        return res.json({ success: true, seller: { email: decoded.email } });
     } catch (error) {
         res.json({ success: false, message: error.message });
     }
