@@ -5,6 +5,8 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import userRoutes from "./routes/userRoutes.js";
 import sellerRouter from "./routes/serllerRoutes.js";
+import productRouter from "./routes/productRoutes.js";
+import cartRouter from "./routes/cartRoutes.js";
 
 const app = express(); 
 //for port
@@ -23,6 +25,9 @@ app.use(cors({origin: allowedOrigins, credentials: true}))
 app.get("/", (req, res) => res.send("API is working"));
 app.use('/api/user', userRoutes)
 app.use('/api/seller', sellerRouter)
+app.use('/api/product', productRouter)
+app.use('/api/cart', cartRouter)
+
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`)
